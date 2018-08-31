@@ -1,0 +1,421 @@
+html, body, .container {
+	min-width: 400px;
+	width: auto!important;
+	background-color: #0E0B16; /* Void */
+}
+
+html {
+	position: relative;
+	min-height: 100%;
+}
+
+
+.container {
+	margin-top: 7%;
+}
+
+.row {
+	margin-left: 5%;
+	margin-right: 5%;
+	margin-top: 3%;
+}
+
+nav {
+	color: rgba(255, 255, 255, 0.6);
+}
+
+#date, #time {
+	color: rgba(255, 255, 255, 0.6);
+}
+
+#time {
+	text-align: right;
+}
+
+/* Change the alignment of #time element to left when the browser window is 576px wide or less: */
+@media only screen and (max-width: 576px) {
+	#time {
+		text-align: left;
+	}
+
+}
+
+
+/************************************************/
+/*						Navbar					*/
+/************************************************/
+
+.title {
+	text-decoration: none;
+	color: rgba(255, 255, 255, 0.7);
+}
+
+.title:hover {
+	text-decoration: none;
+	color: rgba(255, 255, 255, 1);
+}
+
+.navbar-nav li:hover {
+	background-color: #0E0B16; /* Void */
+}
+
+#sector1 {
+	margin-top:50px;
+}
+
+.product {
+	text-decoration: none;
+	color: white;
+}
+
+#completion_rate {
+	text-align: center;
+}
+
+#analysis {
+	margin-top: 0px;
+}
+
+#addItem > .input-group {
+	width: 100%;
+}
+
+#addItem > .btn-group {
+	width: 100%;
+	margin-top: 1%;
+}
+
+.list-group-item-text {
+	margin-bottom: 0;
+}
+/************************************************/
+/*						Input					*/
+/************************************************/
+
+.input {
+	background-color: #0E0B16; /* Void */
+	border-radius: 0;
+	border-color: rgba(255, 255, 255, 0.2); 
+	color: rgba(255, 255, 255, 0.5);
+}
+
+div .input:focus {
+	border-color: white;
+	color: #E7DFDD; /* Stark */
+	background-color: #0E0B16; /* Void */
+
+}
+
+#new_task_input {
+	margin-top: 3%;
+	margin-bottom: 1%;
+}
+
+#task_name {
+	font-family: Arial, Helvetica, sans-serif;
+	padding: 25px 20px;
+	box-shadow: none;
+}
+
+#task_length {
+	font-family: Arial, Helvetica, sans-serif;
+	padding: 25px 20px;
+	box-shadow: none;
+}
+
+textarea {
+    resize: none;
+}
+
+/************************************************/
+/*					Add Button					*/
+/************************************************/
+
+.btn-primary, .btn-primary:focus {
+	background-color: #4515f0; /* Blue */
+	color: #E7DFDD; /* Stark */
+	border: 1px solid transparent;
+	border-radius: 0;
+	box-shadow: none;
+	
+	/* Transitions */
+	-webkit-transition: background-color 1s;
+	-moz-transition: background-color 1s;
+	-o-transition: background-color 1s;
+	-ms-transition: background-color 1s;
+	transition: background-color 1s;
+}
+
+.btn-primary:hover, .btn-primary:active, .btn-primary:not(:disabled):not(.disabled):active {
+	color: #E7DFDD; /* Stark */
+	background-color: #A238CA; /* Fuschia */
+	border: 1px solid transparent;
+	box-shadow: none;
+}
+
+.btn-outline-primary, .btn-outline-primary:focus {
+	color: #E7DFDD; /* Stark */
+	border: 1px solid #4515f0;
+	border-radius: 0;
+	box-shadow: none;
+	
+	/* Transitions */
+	-webkit-transition: background-color 1s;
+	-moz-transition: background-color 1s;
+	-o-transition: background-color 1s;
+	-ms-transition: background-color 1s;
+	transition: background-color 1s;
+}
+
+.btn-outline-primary:hover, .btn-outline-primary:active, .btn-outline-primary:not(:disabled):not(.disabled):active {
+	color: #E7DFDD; /* Stark */
+	background-color: #A238CA; /* Fuschia */
+	border: 1px solid #A238CA;
+	box-shadow: none;
+}
+
+.btn-secondary, .btn-secondary:focus {
+	background-color: transparent;
+	color: #0E0B16; /* Void */
+	border-width: 1px solid #0E0B16;
+	border-radius: 0;
+	box-shadow: none;
+
+	/* Transitions */
+	-webkit-transition: background-color 1s;
+	-moz-transition: background-color 1s;
+	-o-transition: background-color 1s;
+	-ms-transition: background-color 1s;
+	transition: background-color 1s;
+}
+
+.btn-secondary:hover, .btn-secondary:active, .btn-secondary:not(:disabled):not(.disabled):active {
+	border-width: 1px solid transparent;
+	color: #E7DFDD; /* Stark */
+	background-color: #6c757d; /* greyish */
+	box-shadow: none;
+}
+
+.checkmark-empty, .checkmark-empty:focus {
+	background-color: #4515f0; /* Blue */
+	color: #E7DFDD; /* Stark */
+	border: 1px solid transparent;
+	border-radius: 0;
+	box-shadow: none;
+	
+	/* Transitions */
+	-webkit-transition: background-color 1s;
+	-moz-transition: background-color 1s;
+	-o-transition: background-color 1s;
+	-ms-transition: background-color 1s;
+	transition: background-color 1s;
+}
+
+.checkmark-empty:hover, .checkmark-empty:active, .checkmark-empty:not(:disabled):not(.disabled):active {
+	color: #E7DFDD; /* Stark */
+	background-color: #A238CA; /* Fuschia */
+	border: 1px solid transparent;
+	box-shadow: none;
+}
+
+.checkmark-checked, .checkmark-checked:focus {
+	background-color: #4515f0; /* Blue */
+	color: #E7DFDD; /* Stark */
+	border: 1px solid transparent;
+	border-radius: 0;
+	box-shadow: none;
+	
+	/* Transitions */
+	-webkit-transition: background-color 1s;
+	-moz-transition: background-color 1s;
+	-o-transition: background-color 1s;
+	-ms-transition: background-color 1s;
+	transition: background-color 1s;
+}
+
+.checkmark-checked:hover, .checkmark-checked:active, .checkmark-checked:not(:disabled):not(.disabled):active {
+	color: #E7DFDD; /* Stark */
+	background-color: #A238CA; /* Fuschia */
+	border: 1px solid transparent;
+	box-shadow: none;
+}
+
+.btn-custom {
+	background: none;
+    float: right;
+    padding: 1px 0 1px 0;
+    border: none;
+}
+
+.progress {
+	margin-top: 10px;
+}
+
+.progress-bar {
+	background-color: #4515f0; /* Blue */
+}
+
+
+.fa-custom-x {
+	font-size: 1.5em
+}
+
+.check {
+	/*float: right;*/
+}
+
+/* Customize the label (the container) */
+.check-container {
+  /*display: block;*/
+  position: relative;
+  padding-left: 35px;
+  /*margin-bottom: 12px;*/
+  cursor: pointer;
+  font-size: 22px;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  float: right;
+}
+
+/* Hide the browser's default checkbox */
+.check-container input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+}
+
+/* Create a custom checkbox */
+.checkmark {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 25px;
+  width: 25px;
+  background-color: #eee;
+}
+
+/* On mouse-over, add a grey background color */
+.check-container:hover input ~ .checkmark {
+  background-color: #ccc;
+}
+
+/* When the checkbox is checked, add a blue background */
+.check-container input:checked ~ .checkmark {
+  background-color: #2196F3;
+}
+
+/* Create the checkmark/indicator (hidden when not checked) */
+.checkmark:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+
+/* Show the checkmark when checked */
+.check-container input:checked ~ .checkmark:after {
+  display: block;
+}
+
+/* Style the checkmark/indicator */
+.check-container .checkmark:after {
+  left: 9px;
+  top: 5px;
+  width: 5px;
+  height: 10px;
+  border: solid white;
+  border-width: 0 3px 3px 0;
+  -webkit-transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
+  transform: rotate(45deg);
+}
+
+
+/************************************************/
+/*					Task List					*/
+/************************************************/
+
+.panel {
+	border-width: 0px;
+	margin-bottom: 60px;
+}
+
+ul li:before {
+    /*Using a Bootstrap glyphicon as the bullet point*/
+    /*content: "\e080";*/
+    /*font-family: 'Glyphicons Halflings';*/
+    /*font-size: 14px;*/
+    /*float: left;*/
+    /*margin-top: 4px;*/
+    /*margin-left: 0px;*/
+    /*margin-right: 10px;*/
+    /*color: #CCCCCC;*/
+}
+
+#myList {
+	width: 100%;
+	
+}
+
+#myList li {
+	/*padding: 20px;*/
+	background-color: #ccc !important; 
+	color: #333;
+	border: 1px solid #333;
+	
+	/* Transitions */
+	-webkit-transition: background-color 1s;
+	-moz-transition: background-color 1s;
+	-o-transition: background-color 1s;
+	-ms-transition: background-color 1s;
+	transition: background-color 1s;
+}
+
+#myList li:hover {
+	/* Use important so hover continues after click */
+	background-color: #ccc !important; 
+	color: #333;
+}
+
+#otherList > li > h4 {
+	margin-bottom: 0;
+}
+
+#otherList > li > p {
+	margin-bottom: 0.5rem;
+}
+
+#otherList > li > button {
+	color: white;
+}
+
+#otherList li {
+	padding: 20px;
+	background-color: #0E0B16 !important; /* Void */ 
+	color: white;
+	border: 1px solid white;
+	padding-bottom: 25px;
+
+	/* Transitions */
+	-webkit-transition: background-color 1s;
+	-moz-transition: background-color 1s;
+	-o-transition: background-color 1s;
+	-ms-transition: background-color 1s;
+	transition: background-color 1s;
+}
+
+li i {
+	float: right;
+	cursor: pointer;
+	/*display: inline-block;*/
+}
+
+li h4 {
+	display: inline-block;
+	/*width: 80%;*/
+}
+
+.list-group-item-heading {
+	margin: 0;
+}
