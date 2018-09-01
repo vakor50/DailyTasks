@@ -130,6 +130,16 @@ $('#addItemButton').click(function() {
 	}
 });
 
+$('#addTaskContainer').click(function () {
+	if ($(this).attr('aria-expanded') == "true") {
+		$(this).find('i').removeClass('fa-sort-up')
+		$(this).find('i').addClass('fa-sort-down')
+	} else {
+		$(this).find('i').removeClass('fa-sort-down')
+		$(this).find('i').addClass('fa-sort-up')
+	}
+})
+
 function isSameDay(d1, d2) {
 	d1 = new Date(d1);
 	d2 = new Date(d2);
@@ -343,12 +353,16 @@ $('#myList').delegate('li>.btn-checkmark', 'click', function() {
 $(document).ready(function () {
 	tick();
 
+	var num_completed_tasks = 0;
+	var num_active_tasks = 0;
+
 	if (localStorage["newTab_DailyTracker_tasks"] != null && localStorage["newTab_DailyTracker_tasks"] != "") {
 		entries = JSON.parse(localStorage["newTab_DailyTracker_tasks"]);
 	}
 	// entries = [["help", "idk", 1], ["vir", "thakor", 2]];
 	for (var i = 0; i < entries.length; i++) {
 		if (!entries[i].removed && entries[i].completed == false) {
+			num_active_tasks++;
 			progress = parseFloat((entries[i].status/entries[i].days) * 100)
 			isChecked = isSameDay(new Date().getTime(), entries[i].last_checked)
 
@@ -366,6 +380,7 @@ $(document).ready(function () {
 				+ '</div>'
 			);
 		} else if (!entries[i].removed && entries[i].completed == true) {
+			num_completed_tasks++;
 			progress = parseFloat((entries[i].status/entries[i].days) * 100);
 			isChecked = isSameDay(new Date().getTime(), entries[i].last_checked);
 			$('#completed_wrap').removeClass('d-none');
@@ -388,4 +403,8 @@ $(document).ready(function () {
 	console.log(entries);
 
 	calculateCompletionRate()
+
+	if (num_active_tasks == 0) {
+		$('#title-message').text('Add a task to get started!')
+	}
 });

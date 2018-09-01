@@ -254,6 +254,16 @@ textarea {
 	width: 24px;
 }
 
+.fa-sort-down {
+	top: -2px;
+	position: relative;
+}
+
+.fa-sort-up {
+	top: 8px;
+	position: relative;
+}
+
 .remove {
     float: right;
 }
@@ -279,6 +289,9 @@ textarea {
 	background-color: #A238CA; /* Fuschia */
 }
 
+#title-message {
+	text-align: center;
+}
 
 .fa-custom-x {
 	font-size: 1.5em
