@@ -170,7 +170,7 @@ textarea {
 .btn-outline-primary:hover, .btn-outline-primary:active, .btn-outline-primary:not(:disabled):not(.disabled):active {
 	color: #E7DFDD; /* Stark */
 	background-color: #A238CA; /* Fuschia */
-	border: 1px solid #A238CA;
+	border: 1px solid #A238CA; /* Fuschia */
 	box-shadow: none;
 }
 
@@ -196,12 +196,14 @@ textarea {
 	box-shadow: none;
 }
 
-.checkmark-empty, .checkmark-empty:focus {
-	background-color: #4515f0; /* Blue */
-	color: #E7DFDD; /* Stark */
-	border: 1px solid transparent;
+.btn-checkmark, .btn-checkmark:focus {
+	background-color: transparent; /* Blue */
+	/*color: #E7DFDD; /* Stark */*/
+	color: inherit;
+	border: 1px solid #4515f0;
 	border-radius: 0;
 	box-shadow: none;
+	padding: .2rem .5rem;
 	
 	/* Transitions */
 	-webkit-transition: background-color 1s;
@@ -211,19 +213,26 @@ textarea {
 	transition: background-color 1s;
 }
 
-.checkmark-empty:hover, .checkmark-empty:active, .checkmark-empty:not(:disabled):not(.disabled):active {
+.btn-checkmark:hover, .btn-checkmark:active, .btn-checkmark:not(:disabled):not(.disabled):active {
 	color: #E7DFDD; /* Stark */
 	background-color: #A238CA; /* Fuschia */
-	border: 1px solid transparent;
+	border: 1px solid #A238CA;
 	box-shadow: none;
 }
 
-.checkmark-checked, .checkmark-checked:focus {
-	background-color: #4515f0; /* Blue */
-	color: #E7DFDD; /* Stark */
+.empty > i {
+	visibility: hidden;
+}
+
+.btn-remove, .btn-remove:focus {
+	background-color: transparent; /* Blue */
+	/*color: #E7DFDD; /* Stark */*/
+	color: inherit;
+	/*border: 1px solid #4515f0;*/
 	border: 1px solid transparent;
 	border-radius: 0;
 	box-shadow: none;
+	padding: .2rem .5rem;
 	
 	/* Transitions */
 	-webkit-transition: background-color 1s;
@@ -233,26 +242,41 @@ textarea {
 	transition: background-color 1s;
 }
 
-.checkmark-checked:hover, .checkmark-checked:active, .checkmark-checked:not(:disabled):not(.disabled):active {
+.btn-remove:hover, .btn-remove:active, .btn-remove:not(:disabled):not(.disabled):active {
 	color: #E7DFDD; /* Stark */
 	background-color: #A238CA; /* Fuschia */
+	/*border: 1px solid #A238CA;*/
 	border: 1px solid transparent;
 	box-shadow: none;
 }
 
-.btn-custom {
-	background: none;
+.fa-square-o {
+	width: 24px;
+}
+
+.remove {
     float: right;
-    padding: 1px 0 1px 0;
-    border: none;
+}
+
+#myList > li > .progress {
+	height: 10px;
+}
+
+#myList > li > .btn-checkmark {
+    float: right;
+}
+
+#otherList > li > .progress {
+	height: 2px;
 }
 
 .progress {
-	margin-top: 10px;
+	margin-top: 15px;
 }
 
 .progress-bar {
-	background-color: #4515f0; /* Blue */
+	/*background-color: #4515f0; Blue */
+	background-color: #A238CA; /* Fuschia */
 }
 
 
@@ -262,73 +286,6 @@ textarea {
 
 .check {
 	/*float: right;*/
-}
-
-/* Customize the label (the container) */
-.check-container {
-  /*display: block;*/
-  position: relative;
-  padding-left: 35px;
-  /*margin-bottom: 12px;*/
-  cursor: pointer;
-  font-size: 22px;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-  float: right;
-}
-
-/* Hide the browser's default checkbox */
-.check-container input {
-  position: absolute;
-  opacity: 0;
-  cursor: pointer;
-}
-
-/* Create a custom checkbox */
-.checkmark {
-  position: absolute;
-  top: 0;
-  left: 0;
-  height: 25px;
-  width: 25px;
-  background-color: #eee;
-}
-
-/* On mouse-over, add a grey background color */
-.check-container:hover input ~ .checkmark {
-  background-color: #ccc;
-}
-
-/* When the checkbox is checked, add a blue background */
-.check-container input:checked ~ .checkmark {
-  background-color: #2196F3;
-}
-
-/* Create the checkmark/indicator (hidden when not checked) */
-.checkmark:after {
-  content: "";
-  position: absolute;
-  display: none;
-}
-
-/* Show the checkmark when checked */
-.check-container input:checked ~ .checkmark:after {
-  display: block;
-}
-
-/* Style the checkmark/indicator */
-.check-container .checkmark:after {
-  left: 9px;
-  top: 5px;
-  width: 5px;
-  height: 10px;
-  border: solid white;
-  border-width: 0 3px 3px 0;
-  -webkit-transform: rotate(45deg);
-  -ms-transform: rotate(45deg);
-  transform: rotate(45deg);
 }
 
 

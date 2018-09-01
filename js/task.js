@@ -96,8 +96,9 @@ $('#addItemButton').click(function() {
 				// + '<span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>&nbsp;' 
 				+ '<strong>' + item + '</strong>' 
 			+ '</h4>'
-			+ '<button class="btn-custom remove" type="button"><i class="fa fa-times fa-custom-x" aria-hidden="true"></i></button>' 
-			+ '<input class="check" type="checkbox" aria-label="Checkbox for following text input">'
+			+ '<button class="btn btn-remove remove" type="button"><i class="fa fa-times fa-custom-x" aria-hidden="true"></i></button>' 
+			// + '<input class="check" type="checkbox" aria-label="Checkbox for following text input">'
+			+ '<button type="button" class="btn btn-checkmark empty" data-checked="0"><i class="fa fa-check fa-custom-x" aria-hidden="true"></i></button>'
 			+ '<div class="progress" data-toggle="tooltip" data-placement="bottom" title="0 out of ' + num_days + '">'
 				+ '<div class="progress-bar" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>'
 			+ '</div>'
@@ -201,9 +202,14 @@ $('ul').delegate('.remove', 'click', function () {
 			break;
 		}
 	}
+
 	localStorage["newTab_DailyTracker_tasks"] = JSON.stringify(entries);
 	console.log(localStorage["newTab_DailyTracker_tasks"]);
 	$(this).parent().remove();
+
+	if ($('#otherList > li').length == 0) {
+		$('#completed_wrap').addClass('d-none')
+	}
 	calculateCompletionRate()
 });
 
@@ -279,16 +285,59 @@ function calculateCompletionRate() {
 	$('#analysis').html(analysis_html)	
 }
 
-$('.btn-checkmark').click(function() {
-	$(this).data('checked', !$(this).data('checked'))
-	if ($(this).data('checked')) {
-		// if now checked
-		$(this).removeClass('checkmark-empty')
-		$(this).addClass('checkmark-checke'd)
+$('#myList').delegate('li>.btn-checkmark', 'click', function() {
+	$(this).data('checked', !$(this).data('checked'));
 
+	$listElem = $(this).parent();
+	var i = -1;
+	var entry = entries.filter((e, index) => {
+		if (e.created == $listElem.attr('value')) {
+			i = index;
+			return e;
+		}
+	});
+	
+	// Handle check mark activation / deactivation
+	if ($(this).data('checked') && !isSameDay(entries[i].last_checked, new Date().getTime()) && !entries[i].completed) {
+		console.log('check activated')
+		// change check mark appearance
+		$(this).removeClass('empty')
+
+		// change entry data
+		entries[i].last_checked = new Date().getTime();
+		entries[i].status += 1;
+
+		// update progress bar
+		progress = parseFloat((entries[i].status/entries[i].days) * 100)
+		$listElem.find('.progress').attr('title', entries[i].status + ' out of ' + entries[i].days)
+		$listElem.find('.progress-bar').attr('aria-valuenow', progress)
+		$listElem.find('.progress-bar').css('width', progress + '%')
+		// if task completed
+		if (entries[i].status == entries[i].days) {
+			entries[i].completed = true;
+			$listElem.data("comp", true);
+			$listElem.appendTo('#otherList');
+			$(this).remove()
+			$('#completed_wrap').removeClass('d-none');
+		}
 	} else {
 		// if now un-checked
+		$(this).addClass('empty')
+
+		// change entry data
+		entries[i].last_checked = 0 // can't be today
+		entries[i].status = (entries[i].status <= 0 ) ? 0 : entries[i].status-1;
+		
+		// update progress bar
+		progress = parseFloat((entries[i].status/entries[i].days) * 100)
+		$listElem.find('.progress').attr('title', entries[i].status + ' out of ' + entries[i].days)
+		$listElem.find('.progress-bar').attr('aria-valuenow', progress)
+		$listElem.find('.progress-bar').css('width', progress + '%')
 	}
+
+	// Update local storage
+	localStorage["newTab_DailyTracker_tasks"] = JSON.stringify(entries);
+	calculateCompletionRate()
 })
 
 $(document).ready(function () {
@@ -309,8 +358,9 @@ $(document).ready(function () {
 					// + '<span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>&nbsp;' 
 					+ '<strong>' + entries[i].taskName + '</strong>' 
 				+ '</h4>'
-				+ '<button class="btn-custom remove" type="button"><i class="fa fa-times fa-custom-x" aria-hidden="true"></i></button>' 
-				+ '<input class="check" type="checkbox" aria-label="Checkbox for following text input" ' + (isChecked ? 'checked' : '') + '>'
+				+ '<button class="btn btn-remove remove" type="button"><i class="fa fa-times fa-custom-x" aria-hidden="true"></i></button>' 
+				// + '<input class="check" type="checkbox" aria-label="Checkbox for following text input" ' + (isChecked ? 'checked' : '') + '>'
+				+ '<button type="button" class="btn btn-checkmark '+ (isChecked ? '' : 'empty') +'" data-checked="'+ (isChecked ? true : false) +'"><i class="fa fa-check fa-custom-x" aria-hidden="true"></i></button>'
 				+ '<div class="progress" data-toggle="tooltip" data-placement="bottom" title="' + entries[i].status + ' out of ' + entries[i].days + '">'
 					+ '<div class="progress-bar" role="progressbar" style="width: ' + progress + '%;" aria-valuenow="' + progress + '" aria-valuemin="0" aria-valuemax="100"></div>'
 				+ '</div>'
@@ -323,11 +373,11 @@ $(document).ready(function () {
 			$('#otherList').append('<li class="list-group-item task" id="note' +numItems+ '" value="' + entries[i].created + '" data-comp="true"></li>');
 			$('#note' + numItems).append(
 				'<h4><strong>' + entries[i].taskName + '</strong></h4>'
-				+ '<button class="btn-custom remove" type="button"><i class="fa fa-times fa-custom-x" aria-hidden="true"></i></button>' 
+				+ '<button class="btn btn-remove remove" type="button"><i class="fa fa-times fa-custom-x" aria-hidden="true"></i></button>' 
 				+ '<p>' + entries[i].status + ' / ' + entries[i].days + ' on ' + getShortDate(entries[i].last_checked) + '</p>'
 
 				// + '<input class="check" type="checkbox" aria-label="Checkbox for following text input" ' + (isChecked ? 'checked disabled' : '') + '>'
-				+ '<div class="progress" style="height: 2px;">'
+				+ '<div class="progress">'
 					+ '<div class="progress-bar" role="progressbar" style="width: ' + progress + '%;" aria-valuenow="' + progress + '" aria-valuemin="0" aria-valuemax="100"></div>'
 				+ '</div>'
 			);
