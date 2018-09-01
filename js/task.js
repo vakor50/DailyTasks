@@ -359,7 +359,8 @@ $(document).ready(function () {
 	var num_completed_tasks = 0;
 	var num_active_tasks = 0;
 	var day_missed = false;
-	var today = new Date()
+	var today = new Date();
+	var max_ten_streak = -1;
 
 	if (localStorage["newTab_DailyTracker_tasks"] != null && localStorage["newTab_DailyTracker_tasks"] != "") {
 		entries = JSON.parse(localStorage["newTab_DailyTracker_tasks"]);
@@ -372,6 +373,10 @@ $(document).ready(function () {
 			entries[i].status = 0;
 			entries[i].last_checked = 0;
 			localStorage["newTab_DailyTracker_tasks"] = JSON.stringify(entries);			
+		} else if (entries[i].status % 10 == 0) {
+			if (max_ten_streak == -1 || entries[max_ten_streak] % 10 < entries[i].status % 10) {
+				max_ten_streak = i;
+			}
 		}
 
 		if (!entries[i].removed && !entries[i].completed) {
@@ -417,5 +422,7 @@ $(document).ready(function () {
 		$('#title-message').text('Add a task to get started!')
 	} else if (day_missed) {
 		$('#title-message').text('Looks like you missed a day towards one of your goals, but that\'s okay, today is the day to start again!')
+	} else if (max_ten_streak >= 0) {
+		$('#title-message').text(entries[max_ten_streak].status + ' days completed from your goal of ' + entries[max_ten_streak].taskName + '! Keep it up!')
 	}
 });

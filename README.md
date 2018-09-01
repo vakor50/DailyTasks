@@ -22,7 +22,6 @@ Starting a habit, or maintaining one, can be challenging because there's any num
 
 ### Planned Functionality & To-Do
 
-- If you miss a day, the counter resets to 0
 - Feature: Milestones, every 10 day streak you get some motivational message "20 days completed on your goal of '100 push ups a day'! Keep it up!"
 - Optional field for "why" translates to short blurb under your task as a reminder for why you're doing this (financial stability, fitness, etc.)
 - replace alert for missing field
@@ -30,6 +29,7 @@ Starting a habit, or maintaining one, can be challenging because there's any num
 
 ### Completed
 
+- If you miss a day, the counter resets to 0
 - Looks like you missed a day towards your goal of '', but that's okay today is the day to start again!
 - progress bar on hover, give "3 / 5 days completed"
 - Add items or habits that you're planning on tracking
