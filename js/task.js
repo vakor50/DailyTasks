@@ -140,14 +140,6 @@ $('#addTaskContainer').click(function () {
 	}
 })
 
-function isSameDay(d1, d2) {
-	d1 = new Date(d1);
-	d2 = new Date(d2);
-	return d1.getFullYear() === d2.getFullYear() &&
-		d1.getMonth() === d2.getMonth() &&
-		d1.getDate() === d2.getDate();
-}
-
 // ******************************************************** //
 // 		jQuery Function to change stylings when li clicked	//
 // 		 - Checked off and change color						//
@@ -345,23 +337,44 @@ $('#myList').delegate('li>.btn-checkmark', 'click', function() {
 		$listElem.find('.progress-bar').css('width', progress + '%')
 	}
 
+	console.log(entries)
 	// Update local storage
 	localStorage["newTab_DailyTracker_tasks"] = JSON.stringify(entries);
 	calculateCompletionRate()
 })
+
+function isSameDay(one, two, increment = 0) {
+	var temp1 = new Date(one),
+		d1 = new Date(temp1.setDate(temp1.getDate() + increment)),
+		d2 = new Date(two);
+
+	return d1.getFullYear() === d2.getFullYear() &&
+		d1.getMonth() === d2.getMonth() &&
+		d1.getDate() === d2.getDate();
+}
 
 $(document).ready(function () {
 	tick();
 
 	var num_completed_tasks = 0;
 	var num_active_tasks = 0;
+	var day_missed = false;
+	var today = new Date()
 
 	if (localStorage["newTab_DailyTracker_tasks"] != null && localStorage["newTab_DailyTracker_tasks"] != "") {
 		entries = JSON.parse(localStorage["newTab_DailyTracker_tasks"]);
 	}
-	// entries = [["help", "idk", 1], ["vir", "thakor", 2]];
+
 	for (var i = 0; i < entries.length; i++) {
-		if (!entries[i].removed && entries[i].completed == false) {
+		// check if one day missed
+		if (!entries[i].completed && !(isSameDay(entries[i].last_checked, today.getTime(), 1) || isSameDay(entries[i].last_checked, today.getTime()))) {
+			day_missed = true;
+			entries[i].status = 0;
+			entries[i].last_checked = 0;
+			localStorage["newTab_DailyTracker_tasks"] = JSON.stringify(entries);			
+		}
+
+		if (!entries[i].removed && !entries[i].completed) {
 			num_active_tasks++;
 			progress = parseFloat((entries[i].status/entries[i].days) * 100)
 			isChecked = isSameDay(new Date().getTime(), entries[i].last_checked)
@@ -369,11 +382,9 @@ $(document).ready(function () {
 			$('#myList').append('<li class="list-group-item task" id="note' +numItems+ '" value="' + entries[i].created + '" data-comp="false"></li>');
 			$('#note' + numItems).append(
 				'<h4 class="list-group-item-heading">'
-					// + '<span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>&nbsp;' 
 					+ '<strong>' + entries[i].taskName + '</strong>' 
 				+ '</h4>'
 				+ '<button class="btn btn-remove remove" type="button"><i class="fa fa-times fa-custom-x" aria-hidden="true"></i></button>' 
-				// + '<input class="check" type="checkbox" aria-label="Checkbox for following text input" ' + (isChecked ? 'checked' : '') + '>'
 				+ '<button type="button" class="btn btn-checkmark '+ (isChecked ? '' : 'empty') +'" data-checked="'+ (isChecked ? true : false) +'"><i class="fa fa-check fa-custom-x" aria-hidden="true"></i></button>'
 				+ '<div class="progress" data-toggle="tooltip" data-placement="bottom" title="' + entries[i].status + ' out of ' + entries[i].days + '">'
 					+ '<div class="progress-bar" role="progressbar" style="width: ' + progress + '%;" aria-valuenow="' + progress + '" aria-valuemin="0" aria-valuemax="100"></div>'
@@ -390,8 +401,6 @@ $(document).ready(function () {
 				'<h4><strong>' + entries[i].taskName + '</strong></h4>'
 				+ '<button class="btn btn-remove remove" type="button"><i class="fa fa-times fa-custom-x" aria-hidden="true"></i></button>' 
 				+ '<p>' + entries[i].status + ' / ' + entries[i].days + ' on ' + getShortDate(entries[i].last_checked) + '</p>'
-
-				// + '<input class="check" type="checkbox" aria-label="Checkbox for following text input" ' + (isChecked ? 'checked disabled' : '') + '>'
 				+ '<div class="progress">'
 					+ '<div class="progress-bar" role="progressbar" style="width: ' + progress + '%;" aria-valuenow="' + progress + '" aria-valuemin="0" aria-valuemax="100"></div>'
 				+ '</div>'
@@ -406,5 +415,7 @@ $(document).ready(function () {
 
 	if (num_active_tasks == 0) {
 		$('#title-message').text('Add a task to get started!')
+	} else if (day_missed) {
+		$('#title-message').text('Looks like you missed a day towards one of your goals, but that\'s okay, today is the day to start again!')
 	}
 });
