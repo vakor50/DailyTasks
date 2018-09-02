@@ -392,3 +392,15 @@ li h4 {
 	text-overflow: ellipsis;
 	width: 80%;
 }
+
+.form-control.is-invalid {
+	border-color: #A238CA; /* Fuschia */
+}
+
+.form-control.is-invalid:focus {
+	border-color: #A238CA; /* Fuschia */
+}
+
+.invalid-feedback {
+	color: #A238CA; /* Fuschia */
+}

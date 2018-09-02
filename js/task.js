@@ -64,15 +64,22 @@ $('#addItemButton').click(function() {
 	$('#task_name').removeClass('is-invalid');
 	$('#task_length').removeClass('is-invalid');
 	if ($('#task_name').val() == "") {
-		// alert("Please enter an item");
 		$('.invalid-feedback').text('Please enter a task name.');
 		$('#task_name').addClass('is-invalid');
+		$('#task_name').focus();
+		return;
 	} else if ($('#task_length').val() == "") {
-		// alert("Please enter a length of time");
 		$('.invalid-feedback').text('Please enter a length of time.');
 		$('#task_length').addClass('is-invalid');
-	}
-	else {
+		$('#task_length').focus();
+		return;
+	} else if ($('#task_length').val() > 100 || $('#task_length').val() < 1) {
+		$('.invalid-feedback').text('Please enter a length of time between 1 and 100 days.');
+		$('#task_length').val('');
+		$('#task_length').addClass('is-invalid');
+		$('#task_length').focus();
+		return;
+	} else {
 		$('#task_name').removeClass('is-invalid');
 		$('#task_length').removeClass('is-invalid');
 
@@ -97,7 +104,7 @@ $('#addItemButton').click(function() {
 			+ '<button class="btn btn-remove remove" type="button"><i class="fa fa-times fa-custom-x" aria-hidden="true"></i></button>' 
 			// + '<input class="check" type="checkbox" aria-label="Checkbox for following text input">'
 			+ '<button type="button" class="btn btn-checkmark empty" data-checked="0"><i class="fa fa-check fa-custom-x" aria-hidden="true"></i></button>'
-			+ '<div class="progress" data-toggle="tooltip" data-placement="bottom" title="0 out of ' + num_days + '">'
+			+ '<div class="progress" data-toggle="tooltip" data-placement="bottom" title="0 out of ' + num_days + ' days">'
 				+ '<div class="progress-bar" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>'
 			+ '</div>'
 		);
@@ -161,7 +168,7 @@ $('ul').delegate('.check', 'click', function () {
 		console.log(entries[i])
 		progress = parseFloat((entries[i].status/entries[i].days) * 100)
 		$listElem.find('.progress').css('height', '2px')
-		$listElem.find('.progress').attr('title', entries[i].status + ' out of ' + entries[i].days)
+		$listElem.find('.progress').attr('title', entries[i].status + ' out of ' + entries[i].days + ' days')
 		$listElem.find('.progress-bar').attr('aria-valuenow', progress)
 		$listElem.find('.progress-bar').css('width', progress + '%')
 		// task completed
@@ -179,7 +186,7 @@ $('ul').delegate('.check', 'click', function () {
 		entries[i].last_checked = 0 // can't be today
 		entries[i].status = (entries[i].status <= 0 ) ? 0 : entries[i].status-1;
 		progress = parseFloat((entries[i].status/entries[i].days) * 100)
-		$listElem.find('.progress').attr('title', entries[i].status + ' out of ' + entries[i].days)
+		$listElem.find('.progress').attr('title', entries[i].status + ' out of ' + entries[i].days + ' days')
 		$listElem.find('.progress-bar').attr('aria-valuenow', progress)
 		$listElem.find('.progress-bar').css('width', progress + '%')
 	}
@@ -309,7 +316,7 @@ $('#myList').delegate('li>.btn-checkmark', 'click', function() {
 
 		// update progress bar
 		progress = parseFloat((entries[i].status/entries[i].days) * 100)
-		$listElem.find('.progress').attr('title', entries[i].status + ' out of ' + entries[i].days)
+		$listElem.find('.progress').attr('title', entries[i].status + ' out of ' + entries[i].days + ' days')
 		$listElem.find('.progress-bar').attr('aria-valuenow', progress)
 		$listElem.find('.progress-bar').css('width', progress + '%')
 		// if task completed
@@ -330,7 +337,7 @@ $('#myList').delegate('li>.btn-checkmark', 'click', function() {
 		
 		// update progress bar
 		progress = parseFloat((entries[i].status/entries[i].days) * 100)
-		$listElem.find('.progress').attr('title', entries[i].status + ' out of ' + entries[i].days)
+		$listElem.find('.progress').attr('title', entries[i].status + ' out of ' + entries[i].days + ' days')
 		$listElem.find('.progress-bar').attr('aria-valuenow', progress)
 		$listElem.find('.progress-bar').css('width', progress + '%')
 	}
@@ -389,7 +396,7 @@ $(document).ready(function () {
 				+ '</h4>'
 				+ '<button class="btn btn-remove remove" type="button"><i class="fa fa-times fa-custom-x" aria-hidden="true"></i></button>' 
 				+ '<button type="button" class="btn btn-checkmark '+ (isChecked ? '' : 'empty') +'" data-checked="'+ (isChecked ? true : false) +'"><i class="fa fa-check fa-custom-x" aria-hidden="true"></i></button>'
-				+ '<div class="progress" data-toggle="tooltip" data-placement="bottom" title="' + entries[i].status + ' out of ' + entries[i].days + '">'
+				+ '<div class="progress" data-toggle="tooltip" data-placement="bottom" title="' + entries[i].status + ' out of ' + entries[i].days + ' days">'
 					+ '<div class="progress-bar" role="progressbar" style="width: ' + progress + '%;" aria-valuenow="' + progress + '" aria-valuemin="0" aria-valuemax="100"></div>'
 				+ '</div>'
 			);
