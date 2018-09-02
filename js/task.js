@@ -373,12 +373,13 @@ $(document).ready(function () {
 
 	for (var i = 0; i < entries.length; i++) {
 		// check if one day missed
-		if (!entries[i].completed && !(isSameDay(entries[i].last_checked, today.getTime(), 1) || isSameDay(entries[i].last_checked, today.getTime()))) {
+		// if ( not completed && NOT (created today OR checked yesterday OR checked today)
+		if (!entries[i].completed && !(isSameDay(entries[i].created, today.getTime()) || isSameDay(entries[i].last_checked, today.getTime(), 1) || isSameDay(entries[i].last_checked, today.getTime()))) {
 			day_missed = true;
 			entries[i].status = 0;
 			entries[i].last_checked = 0;
 			localStorage["newTab_DailyTracker_tasks"] = JSON.stringify(entries);			
-		} else if (entries[i].status % 10 == 0) {
+		} else if (entries[i].status % 10 == 0 && entries[i].status > 0) {
 			if (max_ten_streak == -1 || entries[max_ten_streak] % 10 < entries[i].status % 10) {
 				max_ten_streak = i;
 			}

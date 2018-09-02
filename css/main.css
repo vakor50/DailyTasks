@@ -224,6 +224,10 @@ textarea {
 	visibility: hidden;
 }
 
+.empty:hover > i {
+	visibility: visible;
+}
+
 .btn-remove, .btn-remove:focus {
 	background-color: transparent; /* Blue */
 	/*color: #E7DFDD; /* Stark */*/
