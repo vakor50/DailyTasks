@@ -325,6 +325,9 @@ $('#myList').delegate('li>.btn-checkmark', 'click', function() {
 			$listElem.data("comp", true);
 			$listElem.appendTo('#otherList');
 			$(this).remove()
+			$listElem.find('.remove').after(
+				'<p>' + entries[i].status + ' / ' + entries[i].days + ' on ' + getShortDate(entries[i].last_checked) + '</p>'
+			)
 			$('#completed_wrap').removeClass('d-none');
 		}
 	} else {

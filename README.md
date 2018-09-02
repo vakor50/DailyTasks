@@ -24,6 +24,9 @@ Starting a habit, or maintaining one, can be challenging because there's any num
 
 - Optional field for "why" translates to short blurb under your task as a reminder for why you're doing this (financial stability, fitness, etc.)
 - on hover empty checkbox reveals check mark
+- two step check for deleting a task
+- progress bar has steps to indicated day in sequence
+- day created so you know when you made the task
 
 ### Completed
 
