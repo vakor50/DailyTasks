@@ -388,4 +388,7 @@ li h4 {
 
 .list-group-item-heading {
 	margin: 0;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	width: 80%;
 }

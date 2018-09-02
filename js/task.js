@@ -46,17 +46,6 @@ function isHTML(str) {
 //		JQuery Function to enable "enter" 					//
 //		 - When enter hit, "add note" button clicked		//
 // ******************************************************** //
-$("#task_name").keyup(function(event){
-	// when enter key pressed
- 	if(event.keyCode == 13) {
- 		// click the addItemButton
-     	$("#addItemButton").click();
- 	}
-});
-// ******************************************************** //
-//		JQuery Function to enable "enter" 					//
-//		 - When enter hit, "add note" button clicked		//
-// ******************************************************** //
 $("#task_length, #task_name").keyup(function(event){
 	// when enter key pressed
  	if(event.keyCode == 13) {
@@ -72,12 +61,21 @@ $("#task_length, #task_name").keyup(function(event){
 // ******************************************************** //
 $('#addItemButton').click(function() {
 	// make sure there is text in the item field
-	if($('#task_name').val() == "") {
-		alert("Please enter an item");
+	$('#task_name').removeClass('is-invalid');
+	$('#task_length').removeClass('is-invalid');
+	if ($('#task_name').val() == "") {
+		// alert("Please enter an item");
+		$('.invalid-feedback').text('Please enter a task name.');
+		$('#task_name').addClass('is-invalid');
 	} else if ($('#task_length').val() == "") {
-		alert("Please enter an length of time");
+		// alert("Please enter a length of time");
+		$('.invalid-feedback').text('Please enter a length of time.');
+		$('#task_length').addClass('is-invalid');
 	}
 	else {
+		$('#task_name').removeClass('is-invalid');
+		$('#task_length').removeClass('is-invalid');
+
 		// Remove any html or white space on input, capitalize the words
 		var item = $('#task_name').val().trim();
 		if(isHTML(item)) {
