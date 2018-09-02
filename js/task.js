@@ -92,6 +92,13 @@ $('#addItemButton').click(function() {
 
 		var num_days = parseInt($('#task_length').val());
 
+		var progress_ticks_html = ''
+		for (var j = 0; j < num_days-1; j++) {
+			progress_ticks_html += '<div class="progress-bar progress-tick" role="progressbar" '
+			+ 'style="width: ' + parseFloat((1/num_days) * 100) + '%;" '
+			+ 'aria-valuenow="' + parseFloat((1/num_days) * 100) + '" aria-valuemin="0" aria-valuemax="100"></div>'
+		}
+
 		// Append the new note to the element with id="myList"
 		// $('#myList').append('<a href="#" class="list-group-item" id="note' + numItems + '" value="1" onClick="complete('+numItems+')">');
 		var task_id = new Date().getTime();
@@ -102,10 +109,11 @@ $('#addItemButton').click(function() {
 				+ '<strong>' + item + '</strong>' 
 			+ '</h4>'
 			+ '<button class="btn btn-remove remove" type="button"><i class="fa fa-times fa-custom-x" aria-hidden="true"></i></button>' 
-			// + '<input class="check" type="checkbox" aria-label="Checkbox for following text input">'
 			+ '<button type="button" class="btn btn-checkmark empty" data-checked="0"><i class="fa fa-check fa-custom-x" aria-hidden="true"></i></button>'
+			+ '<p class="description">Created ' + getShortDate(task_id) + '</p>'
 			+ '<div class="progress" data-toggle="tooltip" data-placement="bottom" title="0 out of ' + num_days + ' days">'
 				+ '<div class="progress-bar" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>'
+				+ progress_ticks_html
 			+ '</div>'
 		);
 
@@ -325,8 +333,8 @@ $('#myList').delegate('li>.btn-checkmark', 'click', function() {
 			$listElem.data("comp", true);
 			$listElem.appendTo('#otherList');
 			$(this).remove()
-			$listElem.find('.remove').after(
-				'<p>' + entries[i].status + ' / ' + entries[i].days + ' on ' + getShortDate(entries[i].last_checked) + '</p>'
+			$listElem.find('.description').text(
+				entries[i].status + ' / ' + entries[i].days + ' on ' + getShortDate(entries[i].last_checked)
 			)
 			$('#completed_wrap').removeClass('d-none');
 		}
@@ -342,7 +350,7 @@ $('#myList').delegate('li>.btn-checkmark', 'click', function() {
 		progress = parseFloat((entries[i].status/entries[i].days) * 100)
 		$listElem.find('.progress').attr('title', entries[i].status + ' out of ' + entries[i].days + ' days')
 		$listElem.find('.progress-bar').attr('aria-valuenow', progress)
-		$listElem.find('.progress-bar').css('width', progress + '%')
+		$listElem.find('.progress-bar:not(.progress-tick)').css('width', progress + '%')
 	}
 
 	console.log(entries)
@@ -392,6 +400,13 @@ $(document).ready(function () {
 			num_active_tasks++;
 			progress = parseFloat((entries[i].status/entries[i].days) * 100)
 			isChecked = isSameDay(new Date().getTime(), entries[i].last_checked)
+	
+			var progress_ticks_html = ''
+			for (var j = 0; j < (entries[i].days - entries[i].status); j++) {
+				progress_ticks_html += '<div class="progress-bar progress-tick" role="progressbar" '
+				+ 'style="width: ' + parseFloat((1/entries[i].days) * 100) + '%;" '
+				+ 'aria-valuenow="' + parseFloat((1/entries[i].days) * 100) + '" aria-valuemin="0" aria-valuemax="100"></div>'
+			}
 
 			$('#myList').append('<li class="list-group-item task" id="note' +numItems+ '" value="' + entries[i].created + '" data-comp="false"></li>');
 			$('#note' + numItems).append(
@@ -400,8 +415,10 @@ $(document).ready(function () {
 				+ '</h4>'
 				+ '<button class="btn btn-remove remove" type="button"><i class="fa fa-times fa-custom-x" aria-hidden="true"></i></button>' 
 				+ '<button type="button" class="btn btn-checkmark '+ (isChecked ? '' : 'empty') +'" data-checked="'+ (isChecked ? true : false) +'"><i class="fa fa-check fa-custom-x" aria-hidden="true"></i></button>'
+				+ '<p class="description">Created ' + getShortDate(entries[i].created) + '</p>'
 				+ '<div class="progress" data-toggle="tooltip" data-placement="bottom" title="' + entries[i].status + ' out of ' + entries[i].days + ' days">'
 					+ '<div class="progress-bar" role="progressbar" style="width: ' + progress + '%;" aria-valuenow="' + progress + '" aria-valuemin="0" aria-valuemax="100"></div>'
+					+ progress_ticks_html
 				+ '</div>'
 			);
 		} else if (!entries[i].removed && entries[i].completed == true) {

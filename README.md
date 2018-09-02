@@ -23,14 +23,14 @@ Starting a habit, or maintaining one, can be challenging because there's any num
 ### Planned Functionality & To-Do
 
 - Optional field for "why" translates to short blurb under your task as a reminder for why you're doing this (financial stability, fitness, etc.)
-- on hover empty checkbox reveals check mark
 - two step check for deleting a task
-- progress bar has steps to indicated day in sequence
-- day created so you know when you made the task
 
 ### Completed
 
+- progress bar has steps to indicated day in sequence
+- day created so you know when you made the task
 - replace alert for missing field
+- on hover empty checkbox reveals check mark
 - minimize task names that are too long (character limit or cutting it up)
 - Feature: Milestones, every 10 day streak you get some motivational message "20 days completed on your goal of '100 push ups a day'! Keep it up!"
 - If you miss a day, the counter resets to 0

@@ -280,17 +280,27 @@ textarea {
     float: right;
 }
 
+#myList > li > p {
+	margin-bottom: 0;
+}
+
 #otherList > li > .progress {
 	height: 2px;
 }
 
+
 .progress {
-	margin-top: 15px;
+	margin-top: 0.5rem;
 }
 
 .progress-bar {
 	/*background-color: #4515f0; Blue */
 	background-color: #A238CA; /* Fuschia */
+}
+
+.progress-tick {
+	background-color: transparent;
+	border-right: 1px solid #ccc; 
 }
 
 #title-message {
