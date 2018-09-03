@@ -3,9 +3,7 @@ var numItems = 0;
 
 
 // ******************************************************** //
-// 		JS Function to fix Name    							//
-// 		 - Eliminates white space							//
-//		 - Capiltalizes name								//
+// 		Edit string to capitalize every word 				//
 // ******************************************************** //
 function toName(s) {
 	// remove characters that aren't a-zA-Z
@@ -39,12 +37,8 @@ function isHTML(str) {
 	return false;
 }
 
-
-
-
 // ******************************************************** //
-//		JQuery Function to enable "enter" 					//
-//		 - When enter hit, "add note" button clicked		//
+//		Add Item Button triggered by "enter" key			//
 // ******************************************************** //
 $("#task_length, #task_name").keyup(function(event){
 	// when enter key pressed
@@ -55,7 +49,7 @@ $("#task_length, #task_name").keyup(function(event){
 });
 
 // ******************************************************** //
-//		JQuery Function for Add Item Button 				//
+//		Add Item Button 					 				//
 //		 - When element with id="AddItemButton" clicked,	//
 //			add note 										//
 // ******************************************************** //
@@ -108,7 +102,9 @@ $('#addItemButton').click(function() {
 				// + '<span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>&nbsp;' 
 				+ '<strong>' + item + '</strong>' 
 			+ '</h4>'
-			+ '<button class="btn btn-remove remove" type="button"><i class="fa fa-times fa-custom-x" aria-hidden="true"></i></button>' 
+			+ '<button class="btn btn-remove remove" type="button" '
+				+ 'data-toggle="popover" data-placement="top" data-trigger="focus" title >'
+				+ '<i class="fa fa-times fa-custom-x" aria-hidden="true"></i></button>' 
 			+ '<button type="button" class="btn btn-checkmark empty" data-checked="0"><i class="fa fa-check fa-custom-x" aria-hidden="true"></i></button>'
 			+ '<p class="description">Created ' + getShortDate(task_id) + '</p>'
 			+ '<div class="progress" data-toggle="tooltip" data-placement="bottom" title="0 out of ' + num_days + ' days">'
@@ -116,6 +112,13 @@ $('#addItemButton').click(function() {
 				+ progress_ticks_html
 			+ '</div>'
 		);
+
+		$('.remove').popover({
+			animation: true,
+			content: popupElement,
+			html: true
+		});
+        $('.popover-dismiss').popover({trigger: 'focus'}); 
 
 		// add item to list of entries
 		entries.push({
@@ -143,6 +146,9 @@ $('#addItemButton').click(function() {
 	}
 });
 
+// ******************************************************** //
+// 		 Toggle the arrow icon on 'Add Task' button			//
+// ******************************************************** //
 $('#addTaskContainer').click(function () {
 	if ($(this).attr('aria-expanded') == "true") {
 		$(this).find('i').removeClass('fa-sort-up')
@@ -154,62 +160,20 @@ $('#addTaskContainer').click(function () {
 })
 
 // ******************************************************** //
-// 		jQuery Function to change stylings when li clicked	//
-// 		 - Checked off and change color						//
+// 		Delete task 										//
 // ******************************************************** //
-$('ul').delegate('.check', 'click', function () {
-	$listElem = $(this).parent();
-	var i = -1;
-	var entry = entries.filter((e, index) => {
-		if (e.created == $listElem.attr('value')) {
-			i = index;
-			return e;
-		}
-	});
-	// if it wasn't checked today, then check and track progress
-	if ($(this).is(':checked') && !isSameDay(entries[i].last_checked, new Date().getTime()) && !entries[i].completed) {
-		console.log('check activated')
-		entries[i].last_checked = new Date().getTime();
-		entries[i].status += 1;
-		// deactivate checkbox, update progress bar
-		// $(this).attr('disabled', true);
-		console.log(entries[i])
-		progress = parseFloat((entries[i].status/entries[i].days) * 100)
-		$listElem.find('.progress').css('height', '2px')
-		$listElem.find('.progress').attr('title', entries[i].status + ' out of ' + entries[i].days + ' days')
-		$listElem.find('.progress-bar').attr('aria-valuenow', progress)
-		$listElem.find('.progress-bar').css('width', progress + '%')
-		// task completed
-		if (entries[i].status == entries[i].days) {
-			entries[i].completed = true;
-			$listElem.data("comp", true);
-			$listElem.appendTo('#otherList');
-			$(this).remove()
-			$('#completed_wrap').removeClass('d-none');
-		}
-	} else {
-		console.log('check deactivated')
-		console.log(entries[i])
+var popupElement = '<div class="btn-group btn-toggle">'
+						+ 'Are you sure you want to delete the task?'
+						+ '<button class="btn btn-sm btn-primary active verify-remove">Delete</button>'
+					+ '</div>';
+$('body').delegate('.verify-remove', 'click', function () {
+	console.log('verified remove')
 
-		entries[i].last_checked = 0 // can't be today
-		entries[i].status = (entries[i].status <= 0 ) ? 0 : entries[i].status-1;
-		progress = parseFloat((entries[i].status/entries[i].days) * 100)
-		$listElem.find('.progress').attr('title', entries[i].status + ' out of ' + entries[i].days + ' days')
-		$listElem.find('.progress-bar').attr('aria-valuenow', progress)
-		$listElem.find('.progress-bar').css('width', progress + '%')
-	}
+	pop_id = $('.popover').attr('id')
+	$rmvBtn = $('.remove[aria-describedby="'+ pop_id +'"]')
 
-	localStorage["newTab_DailyTracker_tasks"] = JSON.stringify(entries);
-	calculateCompletionRate()
-});
-
-// ******************************************************** //
-// 		jQuery Function to remove an li element 			//
-// 		 - x icon											//
-// ******************************************************** //
-$('ul').delegate('.remove', 'click', function () {
 	for (var i = 0; i < entries.length; i++) {
-		if (entries[i].created == $(this).parent().attr('value')) {
+		if (entries[i].created == $rmvBtn.parent().attr('value')) {
 			entries[i].removed = true;
 			entries.splice(i, 1);
 			console.log("----\nAfter remove:");
@@ -220,16 +184,21 @@ $('ul').delegate('.remove', 'click', function () {
 
 	localStorage["newTab_DailyTracker_tasks"] = JSON.stringify(entries);
 	console.log(localStorage["newTab_DailyTracker_tasks"]);
-	$(this).parent().remove();
+	$rmvBtn.parent().remove();
 
 	if ($('#otherList > li').length == 0) {
 		$('#completed_wrap').addClass('d-none')
 	}
-	calculateCompletionRate()
-});
+})
+
+// $('ul').delegate('.remove', 'click', function () {
+// });
 
 var days = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
 var months = ["Jan.", "Feb.", "Mar.", "Apr.", "May", "June", "July", "Aug.", "Sept.", "Oct.", "Nov.", "Dec."];
+// ******************************************************** //
+// 		Update the date every minute 	 		 			//
+// ******************************************************** //
 function tick() {
 	// console.log("!");
     var d = new Date();
@@ -239,9 +208,12 @@ function tick() {
     $('#time').html(time);
     var date = days[d.getDay()] + ' ' + months[d.getMonth()] + ' ' + d.getDate() + ', ' + d.getFullYear();
     $('#date').html(date);
-    t = setTimeout(tick,5000);
+    t = setTimeout(tick,1000);
 }
 
+// ******************************************************** //
+// 		Convert integer datetime to days, hrs, mins, sec	//
+// ******************************************************** //
 function timeConvert(milli) {
     var seconds = (milli / 1000).toFixed(1);
     var minutes = (milli / (1000 * 60)).toFixed(1);
@@ -259,47 +231,17 @@ function timeConvert(milli) {
     }
 }
 
+// ******************************************************** //
+// 		Print date as just month day, year 					//
+// ******************************************************** //
 function getShortDate(d) {
 	d = new Date(d)
 	return months[d.getMonth()] + ' ' + d.getDate() + ', ' + d.getFullYear();
 }
 
-function calculateCompletionRate() {
-	var time_diff = 0
-	var month_year = []
-	var first_created = new Date().getTime(),
-		last_created = 0
-		// last_completed = 0;
-	for (var i = 0; i < entries.length; i++) {
-		// if (entries[i].completed > 0) {
-		// 	time_diff += (entries[i].completed - entries[i].created); // completed - created
-		// }
-		if (entries[i].created < first_created) { first_created = entries[i].created; }
-		if (entries[i].created >= last_created) { last_created = entries[i].created; }
-		// if (entries[i].completed > last_completed) { last_completed = entries[i].created; }
-	}
-	time_diff /= entries.length; // average time to complete a task
-	
-	analysis_html = ''
-	analysis_arr = [
-		{name: 'Avg. Completion Time:', id: 'completion_time', data: (time_diff == 0) ? '' : timeConvert(time_diff)},
-		// {name: 'Completion Rate:', id: 'completion_rate', data: time_rate},
-		{name: 'First Task Created:', id: 'first_created', data: (first_created == 0) ? '' : getShortDate(first_created)},
-		{name: 'Last Task Created:', id: 'last_created', data: (last_created == 0) ? '' : getShortDate(last_created)},
-		// {name: 'Last Task Completed:', id: 'last_completed', data: (last_completed == 0) ? '' : getShortDate(last_completed)},
-	]
-	for (i = 0; i < analysis_arr.length; i++) {
-		if (analysis_arr[i].data != '') {
-			analysis_html += 
-				'<div class="col-sm-3 col-xs-6">'
-					+ '<h5 class="product">' + analysis_arr[i].name + '</h5>'
-					+ '<p class="product" id="' + analysis_arr[i].id + '">' + analysis_arr[i].data + '</p>'
-				+ '</div>'
-		}
-	}
-	$('#analysis').html(analysis_html)	
-}
-
+// ******************************************************** //
+// 		Print date as just month day, year 					//
+// ******************************************************** //
 $('#myList').delegate('li>.btn-checkmark', 'click', function() {
 	$(this).data('checked', !$(this).data('checked'));
 
@@ -356,9 +298,12 @@ $('#myList').delegate('li>.btn-checkmark', 'click', function() {
 	console.log(entries)
 	// Update local storage
 	localStorage["newTab_DailyTracker_tasks"] = JSON.stringify(entries);
-	calculateCompletionRate()
 })
 
+// ******************************************************** //
+// 		Are two dates on the same day?  					//
+// 		Optionally add N days to the first date 			//
+// ******************************************************** //
 function isSameDay(one, two, increment = 0) {
 	var temp1 = new Date(one),
 		d1 = new Date(temp1.setDate(temp1.getDate() + increment)),
@@ -369,7 +314,14 @@ function isSameDay(one, two, increment = 0) {
 		d1.getDate() === d2.getDate();
 }
 
+
 $(document).ready(function () {
+	$(function () {
+		$('[data-toggle="popover"]').popover()
+	})
+	$('.popover-dismiss').popover({
+		trigger: 'focus'
+	})
 	tick();
 
 	var num_completed_tasks = 0;
@@ -413,7 +365,9 @@ $(document).ready(function () {
 				'<h4 class="list-group-item-heading">'
 					+ '<strong>' + entries[i].taskName + '</strong>' 
 				+ '</h4>'
-				+ '<button class="btn btn-remove remove" type="button"><i class="fa fa-times fa-custom-x" aria-hidden="true"></i></button>' 
+				+ '<button class="btn btn-remove remove" type="button" '
+					+ 'data-toggle="popover" data-placement="top" data-trigger="focus" title >'
+					+ '<i class="fa fa-times fa-custom-x" aria-hidden="true"></i></button>' 
 				+ '<button type="button" class="btn btn-checkmark '+ (isChecked ? '' : 'empty') +'" data-checked="'+ (isChecked ? true : false) +'"><i class="fa fa-check fa-custom-x" aria-hidden="true"></i></button>'
 				+ '<p class="description">Created ' + getShortDate(entries[i].created) + '</p>'
 				+ '<div class="progress" data-toggle="tooltip" data-placement="bottom" title="' + entries[i].status + ' out of ' + entries[i].days + ' days">'
@@ -421,6 +375,8 @@ $(document).ready(function () {
 					+ progress_ticks_html
 				+ '</div>'
 			);
+
+
 		} else if (!entries[i].removed && entries[i].completed == true) {
 			num_completed_tasks++;
 			progress = parseFloat((entries[i].status/entries[i].days) * 100);
@@ -430,19 +386,28 @@ $(document).ready(function () {
 			$('#otherList').append('<li class="list-group-item task" id="note' +numItems+ '" value="' + entries[i].created + '" data-comp="true"></li>');
 			$('#note' + numItems).append(
 				'<h4><strong>' + entries[i].taskName + '</strong></h4>'
-				+ '<button class="btn btn-remove remove" type="button"><i class="fa fa-times fa-custom-x" aria-hidden="true"></i></button>' 
+				+ '<button class="btn btn-remove remove" type="button" '
+					+ 'data-toggle="popover" data-placement="top" data-trigger="focus" title >'
+					+ '<i class="fa fa-times fa-custom-x" aria-hidden="true"></i></button>' 
 				+ '<p>' + entries[i].status + ' / ' + entries[i].days + ' on ' + getShortDate(entries[i].last_checked) + '</p>'
 				+ '<div class="progress">'
 					+ '<div class="progress-bar" role="progressbar" style="width: ' + progress + '%;" aria-valuenow="' + progress + '" aria-valuemin="0" aria-valuemax="100"></div>'
 				+ '</div>'
 			);
 		}
+
+        $('.remove').popover({
+			animation: true,
+			content: popupElement,
+			html: true
+		});
+        $('.popover-dismiss').popover({trigger: 'focus'}); 
+
 		numItems++;
 	}
 	console.log("----\nAfter load: " + numItems + " items");
 	console.log(entries);
 
-	calculateCompletionRate()
 
 	if (num_active_tasks == 0) {
 		$('#title-message').text('Add a task to get started!')

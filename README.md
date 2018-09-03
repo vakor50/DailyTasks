@@ -23,10 +23,10 @@ Starting a habit, or maintaining one, can be challenging because there's any num
 ### Planned Functionality & To-Do
 
 - Optional field for "why" translates to short blurb under your task as a reminder for why you're doing this (financial stability, fitness, etc.)
-- two step check for deleting a task
 
 ### Completed
 
+- two step check for deleting a task
 - progress bar has steps to indicated day in sequence
 - day created so you know when you made the task
 - replace alert for missing field
